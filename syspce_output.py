@@ -119,7 +119,7 @@ class Output_(object):
         for anomaly in res:
             self.log.info("")
             self.log.info("PHE ALERT [%s]: %s" % (anomaly['RuleID'],
-                                                                                      anomaly['Rulename']))
+                                                          anomaly['Rulename']))
             tab = '--'
             ntabs = 0
 
@@ -145,8 +145,7 @@ class Output_(object):
 
                 for action_type in process.acciones:
                     for action in process.acciones[action_type]:
-                        param = get_default_parameter_from_id(\
-                                                                                int(action_type))
+                        param = get_default_parameter_from_id(int(action_type))
                         if int(action_type) != 1:
 
                             if action['Alert']:
@@ -175,11 +174,11 @@ class Output_(object):
         ph = win32api.GetCurrentProcess()
         th = win32security.OpenProcessToken(ph, win32con.TOKEN_READ)
         my_sid = win32security.GetTokenInformation(\
-                                                                                        th, win32security.TokenUser)[0]
+                                               th, win32security.TokenUser)[0]
         myType = win32evtlog.EVENTLOG_WARNING_TYPE
         applicationName = "SysmonCorrelator"
         tab = '--'
-        data = "Not configured, use -l option"
+        data = "Not configured, use -l option".encode('ascii')
 
 
         for anomaly in res:
@@ -187,16 +186,16 @@ class Output_(object):
             category = 1
 
             descr = [
-                            "RuleName: " + anomaly['Rulename'],
-                            "RuleID: " + str(anomaly['RuleID']),
-                            "Computer: " + anomaly['Computer'],
-                            "Data: ",
-                            ]
+                     "RuleName: " + anomaly['Rulename'],
+                     "RuleID: " + str(anomaly['RuleID']),
+                     "Computer: " + anomaly['Computer'],
+                     "Data: ",
+                     ]
 
             alert = ""
             alert += "\n"
             alert += "\tPHE ALERT [%s]: %s\n" % (anomaly['RuleID'],
-                                                                                      anomaly['Rulename'])
+                                                 anomaly['Rulename'])
             tab = '--'
             ntabs = 0
 
@@ -220,8 +219,7 @@ class Output_(object):
 
                 for action_type in process.acciones:
                     for action in process.acciones[action_type]:
-                        param = get_default_parameter_from_id(\
-                                                                                int(action_type))
+                        param = get_default_parameter_from_id(int(action_type))
                         if int(action_type) != 1:
 
                             if action['Alert']:
@@ -240,17 +238,17 @@ class Output_(object):
 
             self.log.debug("Writing to eventlog: %s" % anomaly)
             win32evtlogutil.ReportEvent(applicationName, eventID,
-                                                                            eventCategory=category,
-                                                                            eventType=myType, strings=descr,
-                                                                            data=data, sid=my_sid)
+                                             eventCategory=category,
+                                             eventType=myType, strings=descr,
+                                             data=data, sid=my_sid)
 
     def log_result_baseline(self, pnode, s_actions):
         self.log.info("")
         self.log.info("BASELINE ENGINE ALERT [%s]: %s" % (pnode.pid,
-                                                                                                        pnode.ImageFileName ))
+                                                          pnode.ImageFileName ))
         self.log.info("--> Process Points: %s" % pnode.points)
         self.log.info("--> Parent CL: %s" % pnode.acciones["1"][0]\
-                                                                                                        ["ParentCommandLine"])
+                                                       ["ParentCommandLine"])
         for action in s_actions:
             if 'PointsLeft' not in action:
                 param = get_action_from_id(int(action['EventType']))
@@ -262,10 +260,10 @@ class Output_(object):
     def format_result_baseline(self, pnode, s_actions):
         alert_text = '\n'
         alert_text += "\tBASELINE ENGINE ALERT [%s]: %s\n" % (pnode.pid,
-                                                                                                        pnode.ImageFileName )
+                                                              pnode.ImageFileName )
         alert_text += "\t--> Process Points: %s\n" % pnode.points
         alert_text += "\t--> Parent CL: %s\n" % pnode.acciones["1"][0]\
-                                                                                                        ["ParentCommandLine"]
+                                                               ["ParentCommandLine"]
         for action in s_actions:
             if 'PointsLeft' not in action:
                 param = get_action_from_id(int(action['EventType']))
@@ -280,10 +278,10 @@ class Output_(object):
         ph = win32api.GetCurrentProcess()
         th = win32security.OpenProcessToken(ph, win32con.TOKEN_READ)
         my_sid = win32security.GetTokenInformation(\
-                                                                                        th, win32security.TokenUser)[0]
+                                                  th, win32security.TokenUser)[0]
         myType = win32evtlog.EVENTLOG_WARNING_TYPE
         applicationName = "SysmonCorrelator"
-        data = "Not configured, use -l option"
+        data = "Not configured, use -l option".encode('ascii')
         eventID = 1
         category = 2
         descr = ["Engine: Baseline", "Data: "]
@@ -291,9 +289,9 @@ class Output_(object):
         descr.append(res)
 
         win32evtlogutil.ReportEvent(applicationName, eventID,
-                                                                eventCategory=category,
-                                                                eventType=myType, strings=descr,
-                                                                data=data, sid=my_sid)
+                                    eventCategory=category,
+                                    eventType=myType, strings=descr,
+                                    data=data, sid=my_sid)
 
 
     def process_result_hierarchy(self, res):
@@ -306,14 +304,3 @@ class Output_(object):
         res = self.format_result_baseline(pnode, s_actions)
         self.write_result_eventlog_baseline(res)
         self.log_result_baseline(pnode, s_actions)
-
-class bcolors:
-    HEADER = '\033[95m'
-    RED = '\033[91m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'

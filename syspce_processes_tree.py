@@ -33,8 +33,13 @@ class ProcessesTree(object):
         '''
         trunk_guid = re.match(r"\{(\w{8}-\w{4}-\w{4}-)", guid)
         trunk_guid = trunk_guid.group(1)
+        #print("trunk_gid [%s]\npid [%s]\nImg [%s]\n" % (trunk_guid,pid,Image.lower() ))
 
-        return hashlib.md5(trunk_guid + pid + Image.lower()).hexdigest()
+        to_bytes = bytes(trunk_guid + pid + Image.lower(), 'raw_unicode_escape')
+        #return hashlib.md5(trunk_guid + pid + Image.lower()).hexdigest()
+        md5_hex = hashlib.md5( to_bytes ).hexdigest()
+        print("hash [%s] [%s]\n"% (md5_hex, Image.lower()))
+        return hashlib.md5( to_bytes ).hexdigest()
 
     def pre_process_events(self, events_list):
         '''Method for adding more info to Sysmon events'''

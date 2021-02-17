@@ -225,7 +225,11 @@ class HierarchyEngine(Engine):
         for process in pchain:
             anomalyid += process.guid
 
-        anomalyid = hashlib.sha1(anomalyid).hexdigest()
+        to_bytes = bytes(anomalyid, 'raw_unicode_escape')
+
+        print("anomalyid [%s] [%s]\n" % (hashlib.sha1(to_bytes).hexdigest(), anomalyid ))
+        #anomalyid = hashlib.sha1(anomalyid).hexdigest()
+        anomalyid = hashlib.sha1(to_bytes).hexdigest()
         return anomalyid
 
 
