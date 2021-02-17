@@ -5,7 +5,7 @@ from syspce_input_evtx import InputEvtx
 from syspce_input_eventlog import InputEventlog
 from syspce_manager import Manager_
 from syspce_message import *
-from syspce_input_volatility import InputVolatility
+#from syspce_input_volatility import InputVolatility
 
 log = logging.getLogger('sysmoncorrelator')
 
@@ -38,11 +38,11 @@ class InputManager(Manager_):
                 self._read_eventlog(message._src,
                                                         message._content[0])
 
-            elif message._subtype == MessageSubType.READ_FROM_MEMDUMP:
-                self._read_memdump(message._src,
-                                                   message._content[0],
-                                                   message._content[1],
-                                                   message._content[2])
+            #elif message._subtype == MessageSubType.READ_FROM_MEMDUMP:
+            #    self._read_memdump(message._src,
+            #                                       message._content[0],
+            #                                       message._content[1],
+            #                                       message._content[2])
 
     def _read_evtx(self, src, filepath, schema):
         input_evtx = InputEvtx(self.data_buffer_in,
@@ -62,11 +62,11 @@ class InputManager(Manager_):
         input_eventlog.start()
         self.add_working_module(src, [input_eventlog])
 
-    def _read_memdump(self, src, memdump, profile, memcache):
-
-        input_memdump = InputVolatility(self.data_buffer_in,
-                                                                        self.data_condition_in,
-                                                                        src, memdump, profile, memcache)
-        input_memdump.start()
-
-        self.add_working_module(src, [input_memdump])
+#    def _read_memdump(self, src, memdump, profile, memcache):
+#
+#        input_memdump = InputVolatility(self.data_buffer_in,
+#                                                                        self.data_condition_in,
+#                                                                        src, memdump, profile, memcache)
+#        input_memdump.start()
+#
+#        self.add_working_module(src, [input_memdump])
