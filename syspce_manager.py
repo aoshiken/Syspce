@@ -85,7 +85,7 @@ class Manager_(threading.Thread):
                 Dicckey jobname , module is a list of object
                 modules.
         '''
-        if self.modules_list.has_key(job_name):
+        if job_name in self.modules_list:
             self.modules_list[job_name] += modules
         else:
             self.modules_list[job_name] = modules
@@ -94,7 +94,7 @@ class Manager_(threading.Thread):
         ''' Stops a job, one job can involve multiple modules'''
         log.debug("%s stoping modules from %s" % (self.name, job_name))
 
-        if self.modules_list.has_key(job_name):
+        if job_name in self.modules_list:
             for module in self.modules_list[job_name]:
                 if module.is_alive():
                     module.terminate()
@@ -128,7 +128,7 @@ class Manager_(threading.Thread):
                 if done then notify to current Job held by CM
         '''
 
-        jobs_list = self.modules_list.keys()
+        jobs_list = list(self.modules_list.keys())
 
         if not jobs_list:
             log.debug("[%s] No jobs alive" % (self.name))
@@ -165,11 +165,11 @@ class Manager_(threading.Thread):
                                                       self.module_id, [])
 
     def daemon_module_executing(self, job_name):
-        if self.modules_list.has_key(job_name):
+        if job_name in self.modules_list:
             for module in self.modules_list[job_name]:
                 if module.is_alive() and module.daemon_:
                     return True
         else:
-            print "No existe la clave %s en:" % job_name
-            print self.modules_list
+            print("No existe la clave %s en:" % job_name)
+            print(self.modules_list)
         return False

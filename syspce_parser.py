@@ -44,7 +44,7 @@ def get_image_fileName(image):
 
     try:
         ImageFileName = image.split('\\')[-1].lower()
-    except Exception , e:
+    except Exception as e:
         log.error("Getting ImageFileName: %s" % str(e))
 
     return ImageFileName
@@ -55,7 +55,7 @@ def get_sysmon_xml_schema(xmlfile):
         tree = ET.parse(xmlfile)
         root = tree.getroot()
         events = root[1]
-    except Exception, e:
+    except Exception as e:
         log.error("Parsing XML Schema: %s" % e)
         return {}
 
@@ -78,13 +78,13 @@ def parse_eventlog_IDx(schema, event):
             event_parameter = normalize_event_parameter(event_parameter)
             event_details[ event_parameter ] = line
 
-        except Exception, e:
+        except Exception as e:
             raise WrongSchema(str(e))
 
         i += 1
     try:
         event_details['computer'] = get_machine_guid(event_details['ProcessGuid'])
-    except Exception, e:
+    except Exception as e:
         raise WrongSchema(str(e))
 
     return event_details
@@ -164,7 +164,7 @@ def get_list_of_actions(action):
 
         else:
             newreq = {}
-    except Exception, e:
+    except Exception as e:
         raise KeyNotFound(str(e))
 
     return action_list

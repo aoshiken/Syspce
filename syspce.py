@@ -206,4 +206,4 @@ if __name__== "__main__":
     syspce = Syspce()
     syspce.parse_arguments()
     syspce.start()
-    print "Thanks for using Syspce"
+    print("Thanks for using Syspce")

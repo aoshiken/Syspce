@@ -65,7 +65,7 @@ class BucketSystem(object):
 
     def getBucket(self, bucket_name):
 
-        if self.buckets.has_key(bucket_name):
+        if bucket_name in self.buckets:
             return self.buckets[bucket_name]
         else:
             return False

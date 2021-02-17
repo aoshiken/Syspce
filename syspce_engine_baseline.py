@@ -108,13 +108,12 @@ class BaselineEngine(Engine):
     def __check_process_action_to_baseline(self, paction):
 
         # checking reverse search
-        if self.baseline_rules[self.ImageFileName].has_key(\
-                                                                                                str(paction["idEvent"])):
+        if str(paction["idEvent"]) in self.baseline_rules[self.ImageFileName]:
             reverse  = False
             baseline_action = self.baseline_rules[self.ImageFileName]\
                                                                                             [str(paction["idEvent"])]
-        elif self.baseline_rules[self.ImageFileName].has_key("-" + \
-                                                                                                str(paction["idEvent"])):
+        elif "-" + \
+                                                                                                str(paction["idEvent"]) in self.baseline_rules[self.ImageFileName]:
             reverse  = True
             baseline_action = self.baseline_rules[self.ImageFileName]["-" + \
                                                                                             str(paction["idEvent"])]
@@ -132,8 +131,8 @@ class BaselineEngine(Engine):
         #Checking process actions in a time period if we have more than N
         # actions let's alert
 
-        if not result and baseline_action.has_key("N") and \
-                                                baseline_action.has_key("Seconds"):
+        if not result and "N" in baseline_action and \
+                                                "Seconds" in baseline_action:
 
             bucket_name = self.ImageFileName + str(paction["idEvent"]) + \
                                       paction["ProcessGuid"]
@@ -180,7 +179,7 @@ class BaselineEngine(Engine):
 
         # Special case only atribute Points defined
         #Example "2":{"Points": 30}
-        if len(baseline_action) == 1 and baseline_action.has_key("Points"):
+        if len(baseline_action) == 1 and "Points" in baseline_action:
 
             #Adding default action subtract points
             self.total_sub_points += self.default_points
@@ -197,9 +196,9 @@ class BaselineEngine(Engine):
 
         # Special case, action with no atributes only  keys name "Points", "N"
         # and "seconds" Ex. "2":{"Points": 30, "N": 30, "Seconds": 86400}
-        if len(baseline_action) == 3 and baseline_action.has_key("Points")\
-                                                                and baseline_action.has_key("N") \
-                                                                and baseline_action.has_key("Seconds"):
+        if len(baseline_action) == 3 and "Points" in baseline_action\
+                                                                and "N" in baseline_action \
+                                                                and "Seconds" in baseline_action:
 
             return suspicious_attr_seen
 
@@ -219,7 +218,7 @@ class BaselineEngine(Engine):
             # and it depends on schema version could have diferent attributes ...
             # so lets check if process node has this attribute as well
             if b_action_att not in ["Points", "N", "Seconds"] and \
-                                                                                    paction.has_key(b_action_att):
+                                                                                    b_action_att in paction:
 
                 # if reverse , reverse the result with XOR
                 if self.__check_att_value_to_process_att(
@@ -227,7 +226,7 @@ class BaselineEngine(Engine):
                                                                 paction[b_action_att_aux])^reverse:
 
                     # Set specific action attribute subtraction points
-                    if baseline_action[b_action_att].has_key("Points"):
+                    if "Points" in baseline_action[b_action_att]:
                         self.total_sub_points += baseline_action[b_action_att]\
                                                                                                         ["Points"]
                         sub_points = baseline_action[b_action_att]["Points"]
@@ -279,8 +278,8 @@ class BaselineEngine(Engine):
         return res
 
     def __live_time(self, paction, pnode):
-        if self.baseline_rules[self.ImageFileName].has_key("max_ttl") and \
-                self.baseline_rules[self.ImageFileName].has_key("min_ttl"):
+        if "max_ttl" in self.baseline_rules[self.ImageFileName] and \
+                "min_ttl" in self.baseline_rules[self.ImageFileName]:
             max_b_ttl = self.baseline_rules[self.ImageFileName]["max_ttl"]
             min_b_ttl = self.baseline_rules[self.ImageFileName]["min_ttl"]
         else:
@@ -320,7 +319,7 @@ class BaselineEngine(Engine):
 
                 # There is an action defined on the baseline for this action id
                 # so this process did not do an action that normaly does
-                if self.baseline_rules[self.ImageFileName].has_key(action):
+                if action in self.baseline_rules[self.ImageFileName]:
                     if self.baseline_rules[self.ImageFileName][action]:
                         subp = self.baseline_rules\
                                                         [self.ImageFileName][action]["Points"]

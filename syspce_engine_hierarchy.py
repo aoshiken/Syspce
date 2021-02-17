@@ -106,14 +106,14 @@ class HierarchyEngine(Engine):
             ptree = self.p_tree.processes_tree[machine]
 
             #first element to process
-            new_candidates = ptree.keys()
+            new_candidates = list(ptree.keys())
 
             ntimes_enabled = False
 
             process_list = []
             for i, filter_dicc in enumerate(rule['Content']):
 
-                if filter_dicc.has_key("N") and filter_dicc.has_key("Seconds"):
+                if "N" in filter_dicc and "Seconds" in filter_dicc:
 
                     ntimes_enabled = True
 
@@ -133,7 +133,7 @@ class HierarchyEngine(Engine):
                 else:
                     # not first filter line
                     if i:
-                        if 'c' in filter_dicc.keys()[0]:
+                        if 'c' in list(filter_dicc.keys())[0]:
                             new_candidates = []
                             self.p_tree.get_all_childs(ptree,
                                                                                process_list,
@@ -212,7 +212,7 @@ class HierarchyEngine(Engine):
             pchain.append(pnode)
             anti_loop.append(src_process_guid)
 
-            if not self.p_tree.processes_tree[machine].has_key(pnode.ParentProcessGuid):
+            if pnode.ParentProcessGuid not in self.p_tree.processes_tree[machine]:
                 anti_loop = []
                 break
             else:
@@ -239,7 +239,7 @@ class HierarchyEngine(Engine):
             if bucket:
                 return bucket
 
-            if not self.process_tree[machine].has_key(process.ParentProcessGuid):
+            if process.ParentProcessGuid not in self.process_tree[machine]:
                 break
 
             process = self.process_tree[machine][process.ParentProcessGuid]

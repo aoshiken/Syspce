@@ -296,7 +296,7 @@ class InputVolatility(Input):
 
         process_dll_info = {}
 
-        for _offset, (found_by_scanner, thread) in seen_threads.items():
+        for _offset, (found_by_scanner, thread) in list(seen_threads.items()):
             # Do we need to gather DLLs for module resolution
             if addr_space.address_compare(thread.StartAddress, system_range) != -1:
                 owner = tasks.find_module(mods, mod_addrs,addr_space.address_mask(thread.StartAddress))
@@ -889,7 +889,7 @@ class InputVolatility(Input):
                         self.check_fields(p)
 
                         if p['computer'] == 'ffffffff' and computer_alerts == 0:
-                            print "[SYSPCE] Warning computer is ffffffff, problems while we try to read registry key"
+                            print("[SYSPCE] Warning computer is ffffffff, problems while we try to read registry key")
                             computer_alerts = 1
 
             winlogon_fake_father = False

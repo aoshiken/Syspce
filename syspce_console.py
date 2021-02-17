@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 import logging
 import json
 import os
@@ -87,8 +87,8 @@ class Console(object):
                                                 completer=self.syspce_completer,
                                                 complete_style=CompleteStyle.MULTI_COLUMN)
 
-            except ValueError, e:
-                print "Input error: %s" % str(e)
+            except ValueError as e:
+                print("Input error: %s" % str(e))
                 command = "exit"
 
             if (command == "jobs"):
@@ -117,7 +117,7 @@ class Console(object):
                     job_name = command.split('stop_job ')[1].replace(' ','')
                     self.send_message(MessageSubType.STOP_JOB,
                                                       Module.CONTROL_MANAGER, [job_name])
-                except Exception, e:
+                except Exception as e:
                     self.s_print('Command error %s' % e)
 
             elif(re.match("^set", command)):
@@ -129,7 +129,7 @@ class Console(object):
                                                       Module.CONTROL_MANAGER,
                                                       [var, value])
 
-                except Exception, e:
+                except Exception as e:
                     self.s_print('Command error %s' % e)
 
             elif(re.match("^info", command)):
@@ -156,7 +156,7 @@ class Console(object):
                                                       Module.CONTROL_MANAGER,
                                                       [pid ,eventid, computer])
 
-                except Exception, e:
+                except Exception as e:
                     self.s_print('Command error %s' % e)
 
             elif(re.match("^ps", command)):
@@ -174,7 +174,7 @@ class Console(object):
                                                       Module.CONTROL_MANAGER,
                                                       [tree_id, computer])
 
-                except Exception, e:
+                except Exception as e:
                     self.s_print('Command error %s' % e)
 
             elif(command == "exit" or command == "quit"):
@@ -252,7 +252,7 @@ class Console(object):
                 console
         '''
         self.output_lock.acquire()
-        print string
+        print(string)
         self.output_lock.release()
 
     def get_params(self, commadline):

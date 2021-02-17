@@ -46,8 +46,8 @@ class ManageTree(InfoTree):
         ptree = self.processes_tree.processes_tree
 
         with self.processes_tree.tree_condition_in:
-            if not computer or not ptree.has_key(computer):
-                clist = ptree.keys()
+            if not computer or computer not in ptree:
+                clist = list(ptree.keys())
             else:
                 clist = [computer]
             try:
@@ -63,8 +63,8 @@ class ManageTree(InfoTree):
                 else:
                     self.send_message(info_events)
 
-            except Exception, e:
-                print str(e)
+            except Exception as e:
+                print(str(e))
                 self.send_message("Command Error %s" % e)
 
             self.processes_tree.tree_condition_in.notify_all()
@@ -105,7 +105,7 @@ class ManageTree(InfoTree):
             # If user already provided a session ID lets find all processes
             #created in this session. Using first creation smss.exe we know
             #all processes that belongs to a boot session
-            if tree_id_list.has_key(computer) and  tree_id >=0 and \
+            if computer in tree_id_list and  tree_id >=0 and \
                tree_id < len(tree_id_list[computer]):
                 logon_sessions = []
                 process_list = []
@@ -121,7 +121,7 @@ class ManageTree(InfoTree):
                     else:
                         datetime_end = tree_id_list[computer][tree_id + 1]
 
-                except Exception, e:
+                except Exception as e:
                     self.send_message('\n\t\t%s\n' % str(e))
 
                 # Now get only process between init and end timestamps

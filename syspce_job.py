@@ -120,7 +120,7 @@ class Job(threading.Thread):
                         self._EM_message.send()
 
                         log.debug("%s - sent message to ENGINE MANAGER " % (self.name))
-                    except Exception, e:
+                    except Exception as e:
                         log.error("%s - failed:  %s " % (self.name, e))
                         self.terminate()
 
@@ -139,7 +139,7 @@ class Job(threading.Thread):
                         self._CM_message.send()
 
                         log.debug("%s - sent message to CONTROL MANAGER " % (self.name))
-                    except Exception, e:
+                    except Exception as e:
                         log.error("%s - failed:  %s " % (self.name, e))
                         self.terminate()
                 else:

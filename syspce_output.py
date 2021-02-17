@@ -252,7 +252,7 @@ class Output_(object):
         self.log.info("--> Parent CL: %s" % pnode.acciones["1"][0]\
                                                                                                         ["ParentCommandLine"])
         for action in s_actions:
-            if not action.has_key('PointsLeft'):
+            if 'PointsLeft' not in action:
                 param = get_action_from_id(int(action['EventType']))
                 self.log.info("--> %s" % param)
 
@@ -267,7 +267,7 @@ class Output_(object):
         alert_text += "\t--> Parent CL: %s\n" % pnode.acciones["1"][0]\
                                                                                                         ["ParentCommandLine"]
         for action in s_actions:
-            if not action.has_key('PointsLeft'):
+            if 'PointsLeft' not in action:
                 param = get_action_from_id(int(action['EventType']))
                 alert_text += "\t--> %s\n" % param
 

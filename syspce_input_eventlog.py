@@ -3,8 +3,8 @@ try:
     import win32evtlog
     import win32event
 except:
-    print "Missing dependencies win32evtlog, consider install pywin32"
-    print "#pip install pywin32"
+    print("Missing dependencies win32evtlog, consider install pywin32")
+    print("#pip install pywin32")
     exit(1)
 
 from syspce_input import Input

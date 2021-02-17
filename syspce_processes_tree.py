@@ -53,10 +53,10 @@ class ProcessesTree(object):
             # Volatility input has 'Source': 'Memory' key
             # and processGUI is in md5 format
 
-            if not events_list[i].has_key('Source'):
+            if 'Source' not in events_list[i]:
 
                 #Changing ProcessGUID algorithm due to correlation with volatility
-                if events_list[i].has_key('ProcessId'):
+                if 'ProcessId' in events_list[i]:
                     events_list[i]['ProcessGuidOrig'] = \
                                                     events_list[i]['ProcessGuid']
 
@@ -67,7 +67,7 @@ class ProcessesTree(object):
 
                 # we do the same for event 100 with childProcessId
 
-                if events_list[i].has_key('ChildProcessId'):
+                if 'ChildProcessId' in events_list[i]:
                     events_list[i]['ChildProcessGuidOrig'] = \
                                                     events_list[i]['ChildProcessGuid']
 
@@ -79,7 +79,7 @@ class ProcessesTree(object):
 
                 # we do the same for event 110 with childProcessId
 
-                if events_list[i].has_key('SourceProcessId'):
+                if 'SourceProcessId' in events_list[i]:
                     events_list[i]['SourceProcessGuidOrig'] = \
                                                     events_list[i]['SourceProcessGuid']
 
@@ -91,7 +91,7 @@ class ProcessesTree(object):
 
                 # we do the same for event 110 with childProcessId
 
-                if events_list[i].has_key('TargetProcessId'):
+                if 'TargetProcessId' in events_list[i]:
                     events_list[i]['TargetProcessGuidOrig'] = \
                                                     events_list[i]['TargetProcessGuid']
 
@@ -102,7 +102,7 @@ class ProcessesTree(object):
                                                              events_list[i]['TargetImage'])
 
                 # we do the same for parent process guid
-                if events_list[i].has_key('ParentProcessId'):
+                if 'ParentProcessId' in events_list[i]:
                     events_list[i]['ParentProcessGuidOrig'] = \
                                                              events_list[i]['ParentProcessGuid']
 
@@ -138,12 +138,12 @@ class ProcessesTree(object):
             #Adding new attributes to EventID 8
             if events_list[i]['idEvent'] == 8:
                 start_address = events_list[i]['StartAddress']
-                events_list[i]['StartAddressDec'] = unicode(int(start_address, 16))
+                events_list[i]['StartAddressDec'] = str(int(start_address, 16))
 
             #Adding new attributes to EventID 108
             if events_list[i]['idEvent'] == 108:
                 start_address = events_list[i]['StartAddress']
-                events_list[i]['StartAddressDec'] = unicode(int(start_address, 16))
+                events_list[i]['StartAddressDec'] = str(int(start_address, 16))
 
             i += 1
 
@@ -187,7 +187,7 @@ class ProcessesTree(object):
 
         #Updating Stats
 
-        if self.stats[host_name]['Actions'].has_key(EventId):
+        if EventId in self.stats[host_name]['Actions']:
             self.stats[host_name]['Actions'][EventId] += 1
 
         self.stats[host_name]['TotalEvents'] += 1
@@ -197,16 +197,16 @@ class ProcessesTree(object):
         if req['idEvent'] == 1:
 
             # Process node already in tree
-            if computer_ptree.has_key(ProcessGuid):
+            if ProcessGuid in computer_ptree:
                 node = computer_ptree[ProcessGuid]
 
                 # Volatility input has 'Source': 'Memory' key,
                 # evtx don't have it
                 # Collision dont update
-                if (not node.acciones['1'][0].has_key('Source') and \
-                   not req.has_key('Source')) or \
-                   (node.acciones['1'][0].has_key('Source') and \
-                   req.has_key('Source')):
+                if ('Source' not in node.acciones['1'][0] and \
+                   'Source' not in req) or \
+                   ('Source' in node.acciones['1'][0] and \
+                   'Source' in req):
 
                     self.stats[host_name]['DroppedEvents'] += 1
                 else:
@@ -215,7 +215,7 @@ class ProcessesTree(object):
                     # Update only new atributes, not all of them, let's
                     # keep untouched sysmon ones
                     for attr in req:
-                        if not node.acciones['1'][0].has_key(attr):
+                        if attr not in node.acciones['1'][0]:
                             node.acciones['1'][0][attr] = req[attr]
 
             # new entry
@@ -240,7 +240,7 @@ class ProcessesTree(object):
                 # Adding additional information regarding target
                 if req['idEvent'] == 8 or req['idEvent'] == 10:
 
-                    if computer_ptree.has_key(req['TargetProcessGuid']):
+                    if req['TargetProcessGuid'] in computer_ptree:
                         tnode = computer_ptree[req['TargetProcessGuid']]
 
                         req['TargetSession'] = tnode.acciones['1'][0]['TerminalSessionId']
@@ -252,7 +252,7 @@ class ProcessesTree(object):
                 # Adding additional information regarding source
                 if req['idEvent'] == 108 or req['idEvent'] == 110:
 
-                    if computer_ptree.has_key(req['SourceProcessGuid']):
+                    if req['SourceProcessGuid'] in computer_ptree:
                         snode = computer_ptree[req['SourceProcessGuid']]
                         req['SourceSession'] = \
                                                 snode.acciones['1'][0]['TerminalSessionId']
@@ -296,7 +296,7 @@ class ProcessesTree(object):
             # temporal structure for manage variable attributes ($A)
             self.variable_attributes = {}
 
-            for type_action in filter_dicc.keys():
+            for type_action in list(filter_dicc.keys()):
                 match =  self._check_action(type_action, ptree[process], filter_dicc)
                 if not match:
                     break
@@ -459,7 +459,7 @@ class ProcessesTree(object):
                                                                                   type_and_filter])
 
                     # Finally comparing if a rule filter match a process action
-                    if not (acc.has_key(acc_filter)) or \
+                    if not (acc_filter in acc) or \
                                             not self._check_filter_match(
                                                                     filter_list[type_action][filter],
                                                                     acc[acc_filter], final_reverse):
@@ -468,7 +468,7 @@ class ProcessesTree(object):
                         break
 
                 if result:
-                    if self.actions_matched.has_key(nodo.guid):
+                    if nodo.guid in self.actions_matched:
                         self.actions_matched[nodo.guid].append(acc)
                     else:
                         self.actions_matched.update({nodo.guid:[acc]})
@@ -485,10 +485,10 @@ class ProcessesTree(object):
                             type_and_filter = variable_match[2]
 
                             # Adding to temporal variable
-                            if not self.variable_attributes.has_key(variable_filter):
+                            if variable_filter not in self.variable_attributes:
                                 self.variable_attributes[variable_filter] = {}
 
-                            if not self.variable_attributes[variable_filter].has_key(type_and_filter):
+                            if type_and_filter not in self.variable_attributes[variable_filter]:
                                 self.variable_attributes[variable_filter][type_and_filter] = []
 
                             self.variable_attributes[variable_filter][type_and_filter].append(variable_action)
@@ -538,7 +538,7 @@ class ProcessesTree(object):
                     action['Alert'] = enable
 
     def get_node_by_guid(self, computer, process_guid):
-        if self.processes_tree[computer].has_key(process_guid):
+        if process_guid in self.processes_tree[computer]:
             return self.processes_tree[computer][process_guid]
         else:
             return None

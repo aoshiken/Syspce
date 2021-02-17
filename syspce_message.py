@@ -1,8 +1,8 @@
 try:
     from enum import Enum
 except:
-    print "Missing dependencies enum"
-    print "#pip install enum34 --user"
+    print("Missing dependencies enum")
+    print("#pip install enum34 --user")
     exit(1)
 
 

@@ -121,7 +121,7 @@ class ControlManager(Manager_):
 
             # Sets program configuration parameters
             elif message._subtype == MessageSubType.SET_CONFIG:
-                if self.config_.has_key(message._content[0]):
+                if message._content[0] in self.config_:
                     if message._content[1].lower() == "true" or \
                        message._content[1].lower() == "false":
 
@@ -337,7 +337,7 @@ class ControlManager(Manager_):
             try:
                 filter = eval(self.config_['search_filter'])
                 self.config_['search_filter'] = filter
-            except Exception, e:
+            except Exception as e:
                 log.error("Search filter incorrect:  %s" % e)
                 error = True
 
@@ -403,7 +403,7 @@ class ControlManager(Manager_):
             with open(self.config_['detection_rules']) as json_rules:
                 self.config_['detection_rules_content'] = json.load(json_rules)
 
-        except Exception, e:
+        except Exception as e:
             log.error("Opening or parsing rules file:  %s" % e)
             exit(1)
 
@@ -414,7 +414,7 @@ class ControlManager(Manager_):
             with open(self.config_['detection_macros']) as json_macros:
                 self.config_['detection_macros_content'] = json.load(json_macros)[0]
 
-        except Exception, e:
+        except Exception as e:
             log.error("Opening or parsing macros rules file:  %s" % e)
             exit(1)
 
@@ -425,7 +425,7 @@ class ControlManager(Manager_):
             with open(self.config_['baseline_rules']) as json_baseline:
                 self.config_['baseline_rules_content'] = json.load(json_baseline)[0]
 
-        except Exception, e:
+        except Exception as e:
             log.error("Opening or parsing baseline rules file:  %s" % e)
             exit(1)
 

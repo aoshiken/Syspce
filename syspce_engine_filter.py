@@ -51,7 +51,7 @@ class FilterEngine(Engine):
                     else:
                         self.send_message(event)
 
-            except Exception, e:
+            except Exception as e:
                 pass
 
         self.terminate()

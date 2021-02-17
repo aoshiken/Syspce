@@ -3,8 +3,8 @@ try:
     import win32evtlog
     import win32event
 except:
-    print "Missing dependencies win32evtlog, consider install pywin32"
-    print "#pip install pywin32"
+    print("Missing dependencies win32evtlog, consider install pywin32")
+    print("#pip install pywin32")
     exit(1)
 
 from syspce_input import Input
@@ -37,7 +37,7 @@ class InputEvtx(Input):
         if self.filepath:
             try:
                 h_log = win32evtlog.OpenBackupEventLog(server, self.filepath)
-            except Exception, e:
+            except Exception as e:
                 log.error(str(e))
                 self.console_print(e.args[2])
                 exit(1)
@@ -51,7 +51,7 @@ class InputEvtx(Input):
             source_type = "Microsoft-Windows-Sysmon/Operational"
             try:
                 h_log = win32evtlog.OpenEventLog(server, source_type)
-            except win32evtlogutil.error, details:
+            except win32evtlogutil.error as details:
                 self.console_print(str(details))
                 log.error(str(details))
                 exit(1)
